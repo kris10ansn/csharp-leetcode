@@ -1,3 +1,5 @@
+namespace P2;
+
 public class ListNode
 {
     public int val;

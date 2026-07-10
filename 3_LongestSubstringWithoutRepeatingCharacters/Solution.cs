@@ -1,3 +1,4 @@
+namespace P3;
 
 public class Solution
 {
