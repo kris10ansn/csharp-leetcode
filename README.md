@@ -13,10 +13,13 @@ Each problem lives in its own directory named `<number>_<ProblemName>`:
 
 ```
 LeetCode.csproj      # single test project spanning every problem
+test.sh              # test runner helper
 1_TwoSum/
   Solution.cs        # the solution
+  SolutionTests.cs   # xUnit test cases
 2_AddTwoNumbers/
   Solution.cs        # the solution
+  SolutionTests.cs   # xUnit test cases
   DESCRIPTION.md     # the problem statement
 3_LongestSubstring.../
   Solution.cs        # the solution
@@ -58,8 +61,31 @@ The trailing dot in the filter keeps `P3` from also matching a future `P30`.
    file-scoped namespace `P<number>;`.
 
 No project file is needed — the root `LeetCode.csproj` picks up every `.cs` file
-automatically. The `/add-leetcode-tests` skill can scaffold the directory, a
-solution stub, and test cases straight from a problem URL.
+automatically.
+
+### The `/add-leetcode-tests` skill
+
+This repo ships a [Claude Code](https://claude.com/claude-code) skill at
+[`.claude/skills/add-leetcode-tests/`](.claude/skills/add-leetcode-tests/SKILL.md)
+that scaffolds a new problem from its LeetCode URL. Invoke it with the problem link:
+
+```
+/add-leetcode-tests https://leetcode.com/problems/valid-parentheses/
+```
+
+It will:
+
+1. Fetch the problem description (or ask you to paste it if the page can't be reached).
+2. Create the `<number>_<PascalCaseName>/` directory with the correct `P<number>`
+   namespace.
+3. Write a `Solution.cs` stub matching LeetCode's expected signature — left empty
+   for you to solve by hand. (If a solution already exists, it adds tests only and
+   leaves your code alone.)
+4. Write `SolutionTests.cs` with xUnit cases derived from the worked examples and
+   the constraints.
+5. Verify the expected values against a throwaway reference implementation, then
+   restore the stub.
+6. Add the problem to the Solutions table below.
 
 ## Solutions
 

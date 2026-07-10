@@ -35,7 +35,8 @@ description. Follow this repo's conventions exactly.
 
 4. **Create `Solution.cs`** with the namespace and an empty stub matching
    LeetCode's expected signature — do not implement it (the user writes solutions
-   by hand). Example:
+   by hand). **If `Solution.cs` already exists, leave it untouched** — the user has
+   already solved it; only add tests in that case. Stub example:
 
    ```csharp
    namespace P3;
@@ -60,11 +61,12 @@ description. Follow this repo's conventions exactly.
      names. Reference the constraint each group covers in a comment.
    - Put the tests in `namespace P<number>;` and `using Xunit;`.
 
-6. **Verify the expected values are correct.** Temporarily write a correct
-   reference implementation into `Solution.cs`, run
-   `dotnet test --filter "FullyQualifiedName~P<number>."`, confirm all cases pass,
-   then **restore `Solution.cs` to the empty stub**. Never leave the reference
-   implementation in place — the user writes the real solution.
+6. **Verify the expected values are correct.** If a real solution already exists,
+   just run `dotnet test --filter "FullyQualifiedName~P<number>."` against it — a
+   green run confirms both the tests and the existing solution. Otherwise
+   temporarily write a correct reference implementation into the stub, run the
+   tests, confirm all cases pass, then **restore `Solution.cs` to the empty stub**.
+   Never leave a reference implementation in place — the user writes the real solution.
 
 7. **Update `README.md`** — add a row to the Solutions table linking the problem
    and its `Solution.cs`.
