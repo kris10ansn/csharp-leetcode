@@ -65,6 +65,6 @@ solution stub, and test cases straight from a problem URL.
 
 | # | Problem | Solution | Tests |
 |---|---------|----------|-------|
-| 1 | [Two Sum](https://leetcode.com/problems/two-sum/) | [Solution.cs](1_TwoSum/Solution.cs) | — |
-| 2 | [Add Two Numbers](https://leetcode.com/problems/add-two-numbers/) | [Solution.cs](2_AddTwoNumbers/Solution.cs) | — |
+| 1 | [Two Sum](https://leetcode.com/problems/two-sum/) | [Solution.cs](1_TwoSum/Solution.cs) | [SolutionTests.cs](1_TwoSum/SolutionTests.cs) |
+| 2 | [Add Two Numbers](https://leetcode.com/problems/add-two-numbers/) | [Solution.cs](2_AddTwoNumbers/Solution.cs) | [SolutionTests.cs](2_AddTwoNumbers/SolutionTests.cs) |
 | 3 | [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/) | [Solution.cs](3_LongestSubstringWithoutRepeatingCharacters/Solution.cs) | [SolutionTests.cs](3_LongestSubstringWithoutRepeatingCharacters/SolutionTests.cs) |
