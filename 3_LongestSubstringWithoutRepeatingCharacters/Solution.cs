@@ -4,29 +4,26 @@ public class Solution
     public int LengthOfLongestSubstring(string s)
     {
         int longest = 0;
+        int left = 0;
 
-        int startIndex = 0;
-
-        HashSet<char> hashSet = new();
+        Dictionary<char, int> dict = new();
         char[] chars = s.ToCharArray();
 
-        for (int endIndex = 0; endIndex < chars.Length; endIndex++)
+        for (int i = 0; i < chars.Length; i++)
         {
-            char c = chars[endIndex];
+            char c = chars[i];
 
-            while (!hashSet.Add(c) && startIndex < chars.Length)
+            if (!dict.TryAdd(c, i) && dict.TryGetValue(c, out int index))
             {
-                hashSet.Remove(chars[startIndex]);
-                startIndex += 1;
+                left = Math.Max(left, index + 1);
+                dict[c] = i;
             }
 
-            int length = endIndex - startIndex + 1;
-
-            if (length > longest)
-            {
-                longest = length;
-            }
+            int length = i - left + 1;
+            longest = Math.Max(longest, length);
         }
+
+
 
         return longest;
     }
