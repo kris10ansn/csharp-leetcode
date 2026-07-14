@@ -75,17 +75,19 @@ that scaffolds a new problem from its LeetCode URL. Invoke it with the problem l
 
 It will:
 
-1. Fetch the problem description (or ask you to paste it if the page can't be reached).
+1. Fetch the problem via LeetCode's GraphQL API (or ask you to paste it if the
+   request is blocked).
 2. Create the `<number>_<PascalCaseName>/` directory with the correct `P<number>`
    namespace.
 3. Write a `Solution.cs` stub matching LeetCode's expected signature — left empty
-   for you to solve by hand. (If a solution already exists, it adds tests only and
-   leaves your code alone.)
-4. Write `SolutionTests.cs` with xUnit cases derived from the worked examples and
+   for you to solve by hand. It **never** writes a solution. (If a solution already
+   exists, it adds tests only and leaves your code alone.)
+4. Write `DESCRIPTION.md` with the problem statement.
+5. Write `SolutionTests.cs` with xUnit cases derived from the worked examples and
    the constraints.
-5. Verify the expected values against a throwaway reference implementation, then
-   restore the stub.
-6. Add the problem to the Solutions table below.
+6. Verify the expected values independently (a throwaway scratchpad script),
+   never by writing into `Solution.cs`.
+7. Add the problem to the Solutions table below.
 
 ## Solutions
 

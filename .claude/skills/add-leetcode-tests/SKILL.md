@@ -1,62 +1,54 @@
 ---
 name: add-leetcode-tests
-description: Scaffold a LeetCode problem solution stub and xUnit test cases from a problem's description. Use when the user provides a LeetCode problem (as pasted text/HTML or a saved .html file) and wants tests (and/or a solution stub) created for it in this repo.
+description: Scaffold a LeetCode solution stub and xUnit tests for a problem. Use when the user gives a leetcode.com/problems/... URL (or slug/number) and wants tests (and/or a solution stub) created in this repo.
 ---
 
 # Add LeetCode tests
 
-Given a LeetCode problem's description, create the problem directory, a
-`Solution.cs` stub, and a `SolutionTests.cs` file with xUnit test cases derived
-from the description. Follow this repo's conventions exactly.
+Scaffold a problem directory, an **empty** `Solution.cs` stub, and a
+`SolutionTests.cs` with xUnit cases derived from the problem description.
 
-## Input: how the problem description arrives
+> **Never write a solution.** Solving is always the user's job — no exceptions,
+> not even a temporary or "reference" implementation. Every stub you create must
+> have an empty method body.
 
-LeetCode returns **403** to automated fetchers (WebFetch), so **do not** try to
-fetch `leetcode.com/problems/...` directly. Instead the user supplies the
-problem description in one of these forms:
+## Fetch the problem
 
-- **A saved HTML file** — the user saved the problem page (or its description
-  panel) to a `.html` file and gives you the path. Read it with the Read tool.
-- **Pasted text or HTML** — the user pastes the problem statement (or the raw
-  HTML of the description) straight into the conversation.
+Get the slug from the URL (`leetcode.com/problems/<slug>/`) and curl LeetCode's
+GraphQL API (WebFetch gets 403; this works):
 
-If the user only gives a URL with no description, ask them to either paste the
-problem text/HTML or save the page to an `.html` file and give you the path.
-Still take the URL when offered — it gives the slug and (often) the number.
+```bash
+curl -s https://leetcode.com/graphql \
+  -H 'Content-Type: application/json' \
+  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36' \
+  --data '{"query":"query q($slug:String!){question(titleSlug:$slug){questionFrontendId title content codeSnippets{lang code}}}","variables":{"slug":"<slug>"}}'
+```
 
-## Repo conventions (must match)
+Returns JSON with:
+- `questionFrontendId` → problem **number**
+- `title` → problem **name**
+- `codeSnippets` → use the `lang == "C#"` entry's `code` **verbatim** as the stub
+- `content` → HTML description with the **Examples** and **Constraints**
 
-- One root project, `LeetCode.csproj`, compiles every problem and its tests. Do
-  **not** create a per-problem `.csproj`.
-- Each problem lives in `<number>_<PascalCaseName>/` (e.g. `3_LongestSubstringWithoutRepeatingCharacters/`).
-- Every problem file starts with a file-scoped namespace `P<number>;` so the
-  repeated `Solution` class names don't collide (e.g. `namespace P3;`).
-- Tests use xUnit (`[Theory]`/`[InlineData]` for parameterized cases, `[Fact]`
-  for one-offs). Test class is `SolutionTests`.
+If `question` is null or the body isn't JSON, the request was blocked — ask the
+user to paste the description or a saved `.html` file instead.
+
+## Repo conventions
+
+- Single root `LeetCode.csproj` compiles everything — **no** per-problem `.csproj`.
+- Directory: `<number>_<PascalCaseName>/` (e.g. `3_LongestSubstringWithoutRepeatingCharacters/`).
+- Every file uses file-scoped namespace `P<number>;` (e.g. `namespace P3;`) so the
+  repeated `Solution` classes don't collide.
+- Tests: xUnit, class `SolutionTests`, `[Theory]`/`[InlineData]` for parameterized
+  cases and `[Fact]` for one-offs.
 
 ## Steps
 
-1. **Get the input.** Take whatever the user provided (see "Input" above): an
-   `.html` file path (Read it), pasted text/HTML (use it directly), and/or a
-   URL. If none of these carry the actual problem statement, ask the user to
-   paste the text/HTML or save the page to an `.html` file. Extract the problem
-   slug from the URL (`leetcode.com/problems/<slug>/`) if one was given.
+1. **Fetch** the problem (above). Number and name come from the JSON.
 
-2. **Parse the description.** From the file/pasted content, pull out: the method
-   signature LeetCode expects (the C# starter code), all worked **Examples**
-   (input → output), and the **Constraints** section. If the content is raw
-   HTML, read through the tags to recover this — the examples and constraints
-   are in the description body; the signature is in the code snippet block.
-
-3. **Determine the problem number and name.** Infer them from the description,
-   URL, or page title (e.g. a heading like "3. Longest Substring…"). Ask the
-   user for the LeetCode problem number only if it can't be determined.
-   Directory name is `<number>_<PascalCaseName>`; namespace is `P<number>`.
-
-4. **Create `Solution.cs`** with the namespace and an empty stub matching
-   LeetCode's expected signature — do not implement it (the user writes solutions
-   by hand). **If `Solution.cs` already exists, leave it untouched** — the user has
-   already solved it; only add tests in that case. Stub example:
+2. **`Solution.cs`** — `namespace P<number>;` + the C# snippet with an **empty**
+   method body. If `Solution.cs` already exists, leave it untouched and only add
+   tests.
 
    ```csharp
    namespace P3;
@@ -70,33 +62,31 @@ Still take the URL when offered — it gives the slug and (often) the number.
    }
    ```
 
-5. **Create `SolutionTests.cs`** with cases derived from the description:
-   - One `[Theory]` covering every worked Example from the problem statement,
-     with a comment tying each case back to the stated answer.
-   - Additional cases derived from the **Constraints** (e.g. empty input if the
-     length lower bound is 0, single element, all-same, allowed character
-     classes like digits/symbols/spaces) and classic edge cases for the problem
-     type (off-by-one / pointer-reset traps, etc.).
-   - Group related cases into separate `[Theory]`/`[Fact]` methods with clear
-     names. Reference the constraint each group covers in a comment.
-   - Put the tests in `namespace P<number>;` and `using Xunit;`.
+3. **`DESCRIPTION.md`** — convert the GraphQL `content` HTML to clean Markdown:
+   `# <number>. <title>` heading, the problem prose, each `## Example N:` with its
+   input/output/explanation in a fenced block, and a `## Constraints` list. Match
+   the style of `2_AddTwoNumbers/DESCRIPTION.md`.
 
-6. **Verify the expected values are correct.** If a real solution already exists,
-   just run `dotnet test --filter "FullyQualifiedName~P<number>."` against it — a
-   green run confirms both the tests and the existing solution. Otherwise
-   temporarily write a correct reference implementation into the stub, run the
-   tests, confirm all cases pass, then **restore `Solution.cs` to the empty stub**.
-   Never leave a reference implementation in place — the user writes the real solution.
+4. **`SolutionTests.cs`** (`namespace P<number>;`, `using Xunit;`):
+   - One `[Theory]` covering every worked **Example**, each case commented with
+     the stated answer.
+   - Extra cases from the **Constraints** (empty/single/all-same input, allowed
+     character classes) and classic edge cases for the problem type.
+   - Group related cases into named `[Theory]`/`[Fact]` methods; comment the
+     constraint each group covers.
 
-7. **Update `README.md`** — add a row to the Solutions table linking the problem
-   and its `Solution.cs`.
+5. **Verify expected values without touching `Solution.cs`:**
+   - If a real solution already exists, run the tests — a green run confirms both.
+   - If only the empty stub exists, compute the expected answers with a throwaway
+     script in the scratchpad (Python, `dotnet script`, …). The xUnit tests will
+     fail against the empty stub — that's fine; the independent check is the proof.
 
-8. **Report** the run command to the user:
-   `dotnet test --filter "FullyQualifiedName~P<number>."`
+6. **`README.md`** — add a Solutions-table row linking the problem and its `Solution.cs`.
+
+7. **Report** the run command: `dotnet test --filter "FullyQualifiedName~P<number>."`
 
 ## Notes
 
-- The `--filter` trailing dot matters: `FullyQualifiedName~P3.` avoids also
-  matching a future `P30`.
-- Build artifacts go to a single root `bin/`/`obj/` (already gitignored); don't
+- The trailing dot in `~P<number>.` avoids matching e.g. `P30` when running `P3`.
+- Build artifacts live in the single root `bin/`/`obj/` (gitignored) — don't
   create per-problem ones.
