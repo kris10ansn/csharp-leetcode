@@ -1,13 +1,28 @@
 ---
 name: add-leetcode-tests
-description: Scaffold a LeetCode problem solution stub and xUnit test cases from a problem URL. Use when the user provides a leetcode.com/problems/... link and wants tests (and/or a solution stub) created for it in this repo.
+description: Scaffold a LeetCode problem solution stub and xUnit test cases from a problem's description. Use when the user provides a LeetCode problem (as pasted text/HTML or a saved .html file) and wants tests (and/or a solution stub) created for it in this repo.
 ---
 
 # Add LeetCode tests
 
-Given a LeetCode problem URL, create the problem directory, a `Solution.cs` stub,
-and a `SolutionTests.cs` file with xUnit test cases derived from the problem's
-description. Follow this repo's conventions exactly.
+Given a LeetCode problem's description, create the problem directory, a
+`Solution.cs` stub, and a `SolutionTests.cs` file with xUnit test cases derived
+from the description. Follow this repo's conventions exactly.
+
+## Input: how the problem description arrives
+
+LeetCode returns **403** to automated fetchers (WebFetch), so **do not** try to
+fetch `leetcode.com/problems/...` directly. Instead the user supplies the
+problem description in one of these forms:
+
+- **A saved HTML file** — the user saved the problem page (or its description
+  panel) to a `.html` file and gives you the path. Read it with the Read tool.
+- **Pasted text or HTML** — the user pastes the problem statement (or the raw
+  HTML of the description) straight into the conversation.
+
+If the user only gives a URL with no description, ask them to either paste the
+problem text/HTML or save the page to an `.html` file and give you the path.
+Still take the URL when offered — it gives the slug and (often) the number.
 
 ## Repo conventions (must match)
 
@@ -21,16 +36,21 @@ description. Follow this repo's conventions exactly.
 
 ## Steps
 
-1. **Get the URL.** It's the argument to this skill, or ask the user for it.
-   Extract the problem slug from `leetcode.com/problems/<slug>/`.
+1. **Get the input.** Take whatever the user provided (see "Input" above): an
+   `.html` file path (Read it), pasted text/HTML (use it directly), and/or a
+   URL. If none of these carry the actual problem statement, ask the user to
+   paste the text/HTML or save the page to an `.html` file. Extract the problem
+   slug from the URL (`leetcode.com/problems/<slug>/`) if one was given.
 
-2. **Fetch the description.** Use WebFetch on the URL. Pull out: the method
-   signature LeetCode expects, all worked **Examples** (input → output), and the
-   **Constraints** section. If the page can't be fetched, ask the user to paste
-   the description text and continue from that.
+2. **Parse the description.** From the file/pasted content, pull out: the method
+   signature LeetCode expects (the C# starter code), all worked **Examples**
+   (input → output), and the **Constraints** section. If the content is raw
+   HTML, read through the tags to recover this — the examples and constraints
+   are in the description body; the signature is in the code snippet block.
 
-3. **Determine the problem number and name.** Ask the user for the LeetCode
-   problem number if it isn't obvious from context, or infer it from the URL/page.
+3. **Determine the problem number and name.** Infer them from the description,
+   URL, or page title (e.g. a heading like "3. Longest Substring…"). Ask the
+   user for the LeetCode problem number only if it can't be determined.
    Directory name is `<number>_<PascalCaseName>`; namespace is `P<number>`.
 
 4. **Create `Solution.cs`** with the namespace and an empty stub matching
