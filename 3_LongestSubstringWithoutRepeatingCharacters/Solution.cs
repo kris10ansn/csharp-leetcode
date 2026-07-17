@@ -24,8 +24,6 @@ public class Solution
             longest = Math.Max(longest, length);
         }
 
-
-
         return longest;
     }
 }
