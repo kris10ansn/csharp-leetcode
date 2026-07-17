@@ -97,3 +97,4 @@ It will:
 | 2 | [Add Two Numbers](https://leetcode.com/problems/add-two-numbers/) | [Solution.cs](2_AddTwoNumbers/Solution.cs) | [SolutionTests.cs](2_AddTwoNumbers/SolutionTests.cs) |
 | 3 | [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/) | [Solution.cs](3_LongestSubstringWithoutRepeatingCharacters/Solution.cs) | [SolutionTests.cs](3_LongestSubstringWithoutRepeatingCharacters/SolutionTests.cs) |
 | 4 | [Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays/) | [Solution.cs](4_MedianOfTwoSortedArrays/Solution.cs) | [SolutionTests.cs](4_MedianOfTwoSortedArrays/SolutionTests.cs) |
+| 5 | [Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/) | [Solution.cs](5_LongestPalindromicSubstring/Solution.cs) | [SolutionTests.cs](5_LongestPalindromicSubstring/SolutionTests.cs) |
