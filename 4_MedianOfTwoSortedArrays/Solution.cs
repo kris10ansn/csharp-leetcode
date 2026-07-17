@@ -4,42 +4,67 @@ public class Solution
 {
     public double FindMedianSortedArrays(int[] nums1, int[] nums2)
     {
-        var combinedHalf = new List<int>();
-        int length = nums1.Length + nums2.Length;
+        if (nums1.Length == 0) return Median(nums2);
+        if (nums2.Length == 0) return Median(nums1);
 
-        int i1 = 0;
-        int i2 = 0;
 
-        for (int index = 0; index < length / 2 + 1; index++)
+        int combinedLength = nums1.Length + nums2.Length;
+        int half = (combinedLength + 1) / 2;
+
+        int[] shorter = nums1.Length < nums2.Length ? nums1 : nums2;
+        int[] longer = nums1.Length < nums2.Length ? nums2 : nums1;
+
+        int low = 0;
+        int high = shorter.Length;
+
+
+        while (low <= high)
         {
-            int lowest;
+            int i = (low + high) / 2;
+            int j = half - i;
 
-            bool indiciesInRange = i1 < nums1.Length && i2 < nums2.Length;
-            bool i2OOR = i2 >= nums2.Length;
+            int L1 = i <= 0 ? int.MinValue : shorter[i - 1];
+            int R1 = i >= shorter.Length ? int.MaxValue : shorter[i];
 
-            if ((indiciesInRange && nums1[i1] < nums2[i2]) || i2OOR)
+            int L2 = j <= 0 ? int.MinValue : longer[j - 1];
+            int R2 = j >= longer.Length ? int.MaxValue : longer[j];
+
+            bool success = L1 <= R2 && L2 <= R1;
+
+            if (success && combinedLength % 2 == 0)
             {
-                lowest = nums1[i1++];
+                return Avg(Math.Max(L1, L2), Math.Min(R1, R2));
+            }
+            else if (success)
+            {
+                return Math.Max(L1, L2);
+            }
+            else if (L2 > R1)
+            {
+                low = i + 1;
             }
             else
             {
-                lowest = nums2[i2++];
+                high = i - 1;
             }
-
-            combinedHalf.Add(lowest);
         }
 
-        if (length % 2 == 0)
-        {
-            return Avg(combinedHalf[^1], combinedHalf[^2]);
-        }
-
-        return combinedHalf[^1];
+        throw new Exception("Something went wrong");
     }
 
     public double Avg(int a, int b)
     {
         return (double)(a + b) / 2;
+    }
+
+    public double Median(int[] array)
+    {
+        if (array.Length % 2 == 0)
+        {
+            return Avg(array[array.Length / 2 - 1], array[array.Length / 2]);
+        }
+
+        return array[array.Length / 2];
     }
 
 }

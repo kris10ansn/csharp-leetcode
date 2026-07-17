@@ -55,4 +55,15 @@ public class SolutionTests(ITestOutputHelper output) : ConsoleCapturingTest(outp
     {
         Assert.Equal(expected, new Solution().FindMedianSortedArrays(nums1, nums2), 5);
     }
+
+    // Scratch case: merged [1,1,2,2,3,3,4,4,5,6,7,8], median (3+4)/2 = 3.5.
+    [Fact]
+    public void MyScratchCase()
+    {
+        var result = new Solution().FindMedianSortedArrays(
+            new[] { 1, 2, 3, 4 },
+            new[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+        output.WriteLine($"result = {result}");
+        Assert.Equal(3.5, result, 5);
+    }
 }
