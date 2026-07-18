@@ -13,7 +13,7 @@ Each problem lives in its own directory named `<number>_<ProblemName>`:
 
 ```
 LeetCode.csproj      # single test project spanning every problem
-test.sh              # test runner helper
+Makefile             # test runner helper
 1_TwoSum/
   Solution.cs        # the solution
   SolutionTests.cs   # xUnit test cases
@@ -38,18 +38,26 @@ each one lives in a numbered namespace (`P1`, `P2`, `P3`, ...) at the top of its
 to avoid name collisions. Drop the namespace line when pasting a solution back into
 LeetCode.
 
-Use the `test.sh` helper:
+Use the `make test` helper:
 
 ```
-./test.sh        # run every problem's tests
-./test.sh 3      # run only problem 3 (the P3 namespace)
+make test                                  # run every problem's tests
+make test P=3                              # run only problem 3 (the P3 namespace)
+make test T=HandlesDescriptionExamples     # run that test across all problems
+make test P=3 T=HandlesDescriptionExamples # run that test within problem 3
+make test V=normal                         # quieter output (default is detailed)
 ```
+
+The console logger verbosity defaults to `detailed`, which surfaces each test's
+output even when it passes. Override it with `V=` (e.g. `normal`, `quiet`,
+`diagnostic`).
 
 Or call `dotnet` directly:
 
 ```
 dotnet test                                    # everything
 dotnet test --filter "FullyQualifiedName~P3."  # just problem 3
+dotnet test --logger "console;verbosity=detailed"  # per-test output on success
 ```
 
 The trailing dot in the filter keeps `P3` from also matching a future `P30`.
