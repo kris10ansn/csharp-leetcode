@@ -1,8 +1,9 @@
 using Xunit;
+using Xunit.Abstractions;
 
 namespace P5;
 
-public class SolutionTests
+public class SolutionTests(ITestOutputHelper output) : ConsoleCapturingTest(output)
 {
     // The longest palindrome is not always unique — "babad" admits both "bab"
     // and "aba" — so most cases assert the returned value is *a* valid answer:
