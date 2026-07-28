@@ -63,7 +63,7 @@ public class SolutionTests(ITestOutputHelper output) : ConsoleCapturingTest(outp
         var result = new Solution().FindMedianSortedArrays(
             new[] { 1, 2, 3, 4 },
             new[] { 1, 2, 3, 4, 5, 6, 7, 8 });
-        output.WriteLine($"result = {result}");
+        Output.WriteLine($"result = {result}");
         Assert.Equal(3.5, result, 5);
     }
 }

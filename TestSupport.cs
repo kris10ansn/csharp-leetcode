@@ -24,8 +24,16 @@ using Xunit.Abstractions;
 /// </summary>
 public abstract class ConsoleCapturingTest
 {
-    protected ConsoleCapturingTest(ITestOutputHelper output) =>
+    // Exposed so derived tests can write directly to xUnit's output without
+    // capturing their own copy of the helper (which the primary constructor
+    // already forwards here).
+    protected ITestOutputHelper Output { get; }
+
+    protected ConsoleCapturingTest(ITestOutputHelper output)
+    {
+        Output = output;
         Console.SetOut(new TestOutputWriter(output));
+    }
 
     // Forwards each completed line to ITestOutputHelper. Every Console.Write /
     // WriteLine overload funnels down to Write(char), so overriding just that
