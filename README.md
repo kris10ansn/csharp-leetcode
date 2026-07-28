@@ -108,3 +108,4 @@ It will:
 | 5 | [Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/) | [Solution.cs](5_LongestPalindromicSubstring/Solution.cs) | [SolutionTests.cs](5_LongestPalindromicSubstring/SolutionTests.cs) |
 | 6 | [Zigzag Conversion](https://leetcode.com/problems/zigzag-conversion/) | [Solution.cs](6_ZigzagConversion/Solution.cs) | [SolutionTests.cs](6_ZigzagConversion/SolutionTests.cs) |
 | 7 | [Reverse Integer](https://leetcode.com/problems/reverse-integer/) | [Solution.cs](7_ReverseInteger/Solution.cs) | [SolutionTests.cs](7_ReverseInteger/SolutionTests.cs) |
+| 8 | [String to Integer (atoi)](https://leetcode.com/problems/string-to-integer-atoi/) | [Solution.cs](8_StringToIntegerAtoi/Solution.cs) | [SolutionTests.cs](8_StringToIntegerAtoi/SolutionTests.cs) |
