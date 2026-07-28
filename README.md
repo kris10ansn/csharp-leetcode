@@ -109,3 +109,4 @@ It will:
 | 6 | [Zigzag Conversion](https://leetcode.com/problems/zigzag-conversion/) | [Solution.cs](6_ZigzagConversion/Solution.cs) | [SolutionTests.cs](6_ZigzagConversion/SolutionTests.cs) |
 | 7 | [Reverse Integer](https://leetcode.com/problems/reverse-integer/) | [Solution.cs](7_ReverseInteger/Solution.cs) | [SolutionTests.cs](7_ReverseInteger/SolutionTests.cs) |
 | 8 | [String to Integer (atoi)](https://leetcode.com/problems/string-to-integer-atoi/) | [Solution.cs](8_StringToIntegerAtoi/Solution.cs) | [SolutionTests.cs](8_StringToIntegerAtoi/SolutionTests.cs) |
+| 9 | [Palindrome Number](https://leetcode.com/problems/palindrome-number/) | [Solution.cs](9_PalindromeNumber/Solution.cs) | [SolutionTests.cs](9_PalindromeNumber/SolutionTests.cs) |
